@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion | Amor Maison</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            /* Color Palette */
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-ivory: #F5F3EF;
+            --color-charcoal: #1A1A1A;
+            --color-gray: #E0E0E0;
+            --color-dark-gray: #0A0A0A;
+
+            /* Typography */
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Manrope', sans-serif;
+
+            /* Layout */
+            --spacing-section: clamp(120px, 15vw, 200px);
+            --container-width: 1400px;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-white);
+            color: var(--color-black);
+            font-family: var(--font-sans);
+            font-weight: 300;
+            font-size: clamp(15px, 1.2vw, 17px);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: var(--color-black);
+            color: var(--color-white);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-white);
+            mix-blend-mode: difference;
+        }
+
+        /* Typography Globals */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        .uppercase-label {
+            font-family: var(--font-sans);
+            font-size: clamp(11px, 1vw, 13px);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .italic-serif {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(24px, 3vw, 32px);
+            line-height: 1.4;
+        }
+
+        /* Layout Utility */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        .section-padding {
+            padding-top: var(--spacing-section);
+            padding-bottom: var(--spacing-section);
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--color-black);
+            margin: 0 auto;
+        }
+
+        /* Intersection Observer Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* Buttons & Links */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            border: 1px solid var(--color-black);
+            background: transparent;
+            color: var(--color-black);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-black);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--color-white);
+        }
+
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-inverted {
+            border-color: var(--color-white);
+            color: var(--color-white);
+        }
+
+        .btn-inverted::before {
+            background: var(--color-white);
+        }
+
+        .btn-inverted:hover {
+            color: var(--color-black);
+        }
+
+        /* Navigation */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 100;
+            transition: background-color 0.4s ease, backdrop-filter 0.4s ease, color 0.4s ease;
+            color: var(--color-white);
+        }
+
+        .nav-scrolled {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: var(--color-black);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-scrolled.dark-section-nav {
+            background-color: rgba(10, 10, 10, 0.85);
+            color: var(--color-white);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 5vw;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .brand-name {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            padding-bottom: 4px;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-white);
+            min-width: 160px;
+            border: 1px solid var(--color-gray);
+            z-index: 101;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        .nav-scrolled .dropdown-menu {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark-section-nav .dropdown-menu {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-item {
+            color: var(--color-black);
+            padding: 12px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark-section-nav .dropdown-item {
+            color: var(--color-white);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--color-ivory);
+        }
+
+        .dark-section-nav .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            width: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 1px;
+            width: 100%;
+            background-color: currentColor;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        body.menu-open .menu-toggle span:first-child {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        body.menu-open .menu-toggle span:last-child {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        body.menu-open .nav-wrapper {
+            color: var(--color-black) !important;
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            border-bottom: none !important;
+        }
+
+        body.menu-open .dropdown-item {
+            color: var(--color-black) !important;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: var(--color-white);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease, visibility 0.4s ease;
+                z-index: 1000;
+            }
+
+            body.menu-open .nav-links {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .dropdown-menu {
+                position: static;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                opacity: 1;
+                visibility: visible;
+                display: none;
+                background-color: transparent;
+                margin-top: 20px;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: flex;
+            }
+
+            .nav-scrolled .dropdown-menu,
+            .dark-section-nav .dropdown-menu {
+                background-color: transparent !important;
+                border: none !important;
+            }
+
+            .dark-section-nav .dropdown-item {
+                color: var(--color-black);
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .cursor {
+                display: none !important;
+            }
+
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        /* Page Hero Section */
+        .page-hero {
+            position: relative;
+            height: 70vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            text-align: center;
+        }
+
+        .page-hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* High-end fashion runway or studio texture */
+            background-image: url('assets/images/fashion-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            animation: kenBurns 20s linear infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        .page-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Subtle dark overlay */
+            z-index: -1;
+        }
+
+        .page-hero-content {
+            padding: 0 5vw;
+            margin-top: 70px;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-hero-title {
+            font-size: clamp(60px, 8vw, 100px);
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        /* Text Focus Layout */
+        .focus-text {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: clamp(18px, 2vw, 24px);
+            line-height: 1.6;
+            font-family: var(--font-serif);
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--color-dark-gray);
+            color: var(--color-white);
+            text-align: center;
+        }
+
+        .contact-heading {
+            font-size: clamp(40px, 6vw, 80px);
+            margin-bottom: 80px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 80px;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-info {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--color-gray);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background-color: var(--color-white);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+
+        /* Marquee Carousel */
+        .marquee-wrapper {
+            width: 100vw;
+            overflow: hidden;
+            background-color: var(--color-white);
+            padding: 40px 0 0 0;
+            /* Only top padding so it sits flush on footer */
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 60s linear infinite;
+        }
+
+
+
+        .marquee-item {
+            width: 300px;
+            height: 400px;
+            margin-right: 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .marquee-item {
+                width: 200px;
+                height: 280px;
+            }
+        }
+
+        .marquee-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Force all images and background to strictly B&W */
+        img,
+        .page-hero-bg,
+        .hero-bg {
+            filter: grayscale(100%) contrast(1.1) !important;
+        }
+
+
+    
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--color-black);
+            z-index: 9998; /* Just below the preloader */
+            opacity: 1;
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-transition-overlay.fade-in {
+            opacity: 0;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="custom-cursor"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-wrapper" id="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="brand-name interactive-el">Amor Maison</a>
+            <div class="menu-toggle interactive-el" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links">
+                <a href="about.html" class="nav-link interactive-el">About</a>
+                <div class="dropdown interactive-el">
+                    <span class="nav-link" style="cursor:none;">Maison</span>
+                    <div class="dropdown-menu">
+                        <a href="fashion.html" class="dropdown-item interactive-el">Fashion</a>
+                        <a href="beauty.html" class="dropdown-item interactive-el">Beauty</a>
+                        <a href="wellness.html" class="dropdown-item interactive-el">Wellness</a>
+                    </div>
+                </div>
+                <a href="she-glows.html" class="nav-link interactive-el">She Glows</a>
+                <a href="inside-maison.html" class="nav-link interactive-el">Inside The Maison</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="page-hero">
+            <div class="page-hero-bg"></div>
+            <div class="page-hero-overlay"></div>
+            <div class="page-hero-content">
+                <span class="uppercase-label fade-up">Sector Authority</span>
+                <h1 class="page-hero-title fade-up delay-1">Fashion</h1>
+            </div>
+        </section>
+
+        <!-- Focus Img & Text -->
+        <section class="manifesto section-padding container">
+            <div class="fade-up"
+                style="display: flex; flex-wrap: wrap-reverse; gap: 6vw; align-items: center; justify-content: center;">
+                <div style="flex: 1 1 min(100%, 400px); max-width: 700px;">
+                    <div class="focus-text" style="text-align: left; margin: 0;">
+                        <h2 class="italic-serif" style="margin-bottom: 30px; font-size: clamp(32px, 4vw, 48px);">Curated
+                            Distinction</h2>
+                        In the highly saturated landscape of global fashion, distinction is found in the meticulous
+                        curation
+                        of identity. Amor Maison engineers the underlying strategies that dictate trend formulation,
+                        brand
+                        positioning, and the ultimate creation of heirloom value.
+                    </div>
+                </div>
+                <div
+                    style="flex: 1 1 min(100%, 400px); max-width: 600px; position: relative; overflow: hidden; aspect-ratio: 4/5;">
+                    <img src="assets/images/fashion_detail.png"
+                        style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: transform 1.2s ease;"
+                        onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"
+                        alt="Fashion Architecture">
+                </div>
+            </div>
+        </section>
+
+        <!-- Capabilities Section -->
+        <section class="services section-padding container" style="background-color: var(--color-ivory);">
+            <div class="section-title-wrapper fade-up">
+                <h2 class="section-title"
+                    style="font-size: clamp(36px, 4vw, 48px); text-align: center; margin-bottom: 80px;">Fashion
+                    Capabilities</h2>
+            </div>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 60px; padding: 0 5vw;">
+                <div class="fade-up">
+                    <span class="uppercase-label">01</span>
+                    <h3 style="font-size: 32px; font-family: var(--font-serif); margin: 10px 0 20px; font-weight: 300;">
+                        Campaign Curation</h3>
+                    <p>Conceptualizing and directing vanguard campaigns that arrest attention and anchor your aesthetic
+                        firmly in the cultural zeitgeist.</p>
+                </div>
+                <div class="fade-up delay-1">
+                    <span class="uppercase-label">02</span>
+                    <h3 style="font-size: 32px; font-family: var(--font-serif); margin: 10px 0 20px; font-weight: 300;">
+                        Retail Choreography</h3>
+                    <p>Designing physical and digital spaces that function not merely as points of sale, but as
+                        immersive sanctuaries of the brand.</p>
+                </div>
+                <div class="fade-up delay-2">
+                    <span class="uppercase-label">03</span>
+                    <h3 style="font-size: 32px; font-family: var(--font-serif); margin: 10px 0 20px; font-weight: 300;">
+                        Heirloom Strategy</h3>
+                    <p>Elevating seasonal garments into timeless investments through rigorous narrative framing and
+                        elite scarcity models.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The divide -->
+        <div class="divider fade-up"></div>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact section-padding container dark-section">
+            <div class="fade-up">
+                <h2 class="contact-heading">Let's Create Something Remarkable</h2>
+
+                <div class="contact-info">
+                    <span>Paris &mdash; New York &mdash; London</span>
+                    <span>inquiries@amormaison.com</span>
+                    <span>+33 1 40 20 60 00</span>
+                </div>
+
+                <a href="inside-maison.html" class="btn btn-inverted interactive-el">Initiate Dialogue</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Marquee Carousel -->
+    <section class="marquee-wrapper">
+        <div class="marquee-track">
+            <!-- First Set -->
+            <div class="marquee-item"><img src="assets/images/mq1.jpg" alt="Fashion 1"></div>
+            <div class="marquee-item"><img src="assets/images/mq2.jpg" alt="Fashion 2"></div>
+            <div class="marquee-item"><img src="assets/images/mq3.jpg" alt="Fashion 3"></div>
+            <div class="marquee-item"><img src="assets/images/mq4.jpg" alt="Fashion 4"></div>
+            <div class="marquee-item"><img src="assets/images/mq5.jpg" alt="Fashion 5"></div>
+            <div class="marquee-item"><img src="assets/images/mq6.jpg" alt="Fashion 8"></div>
+            <!-- Duplicated Set for Infinite Loop -->
+            <div class="marquee-item"><img src="assets/images/mq1.jpg" alt="Fashion 1"></div>
+            <div class="marquee-item"><img src="assets/images/mq2.jpg" alt="Fashion 2"></div>
+            <div class="marquee-item"><img src="assets/images/mq3.jpg" alt="Fashion 3"></div>
+            <div class="marquee-item"><img src="assets/images/mq4.jpg" alt="Fashion 4"></div>
+            <div class="marquee-item"><img src="assets/images/mq5.jpg" alt="Fashion 5"></div>
+            <div class="marquee-item"><img src="assets/images/mq6.jpg" alt="Fashion 8"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div>&copy; 2026 Amor Maison. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="#" class="interactive-el">Instagram</a>
+            <a href="#" class="interactive-el">LinkedIn</a>
+            <a href="#" class="interactive-el">X</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+
+
+            
+            // --- Page Transition Overlay Logic ---
+            const transitionOverlay = document.getElementById('page-transition-overlay');
+            if (transitionOverlay) {
+                // Initial fade in
+                requestAnimationFrame(() => {
+                    transitionOverlay.classList.add('fade-in');
+                });
+            }
+
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+                    
+                    // Allow normal navigation for external links, anchors, or new tabs, and exclude preloader interactions
+                    if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:') && target !== '_blank') {
+                        e.preventDefault();
+                        if (transitionOverlay) {
+                            transitionOverlay.classList.remove('fade-in');
+                        }
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 800); // Wait for overlay fade out
+                    }
+                });
+            });
+
+            // --- Custom Cursor Interaction ---
+            const cursor = document.getElementById('custom-cursor');
+            const interactables = document.querySelectorAll('.interactive-el, a, button, .dropdown');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('menu-open');
+                });
+            }
+
+            // --- Mobile Dropdown Toggle ---
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        dropdown.classList.toggle('active');
+                    }
+                });
+            });
+
+            // --- Close menu on link click ---
+            const navLinks = document.querySelectorAll('.nav-link:not(.dropdown > .nav-link), .dropdown-item');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    document.body.classList.remove('menu-open');
+                });
+            });
+
+            // --- Navigation Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            const darkSection = document.querySelector('.dark-section');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('nav-scrolled');
+                } else {
+                    navbar.classList.remove('nav-scrolled');
+                }
+
+                if (darkSection) {
+                    const rect = darkSection.getBoundingClientRect();
+                    if (rect.top <= 70 && rect.bottom >= 0) {
+                        navbar.classList.add('dark-section-nav');
+                    } else {
+                        navbar.classList.remove('dark-section-nav');
+                    }
+                }
+            });
+
+            // --- Scroll Reveal Animations ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+
+</html>

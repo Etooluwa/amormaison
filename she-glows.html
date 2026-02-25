@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>She Glows | Amor Maison</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Manrope:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Color Palette */
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-ivory: #F5F3EF;
+            --color-charcoal: #1A1A1A;
+            --color-gray: #E0E0E0;
+            --color-dark-gray: #0A0A0A;
+
+            /* Typography */
+            --font-serif: 'Cormorant Garamond', serif;
+            --font-sans: 'Manrope', sans-serif;
+
+            /* Layout */
+            --spacing-section: clamp(120px, 15vw, 200px);
+            --container-width: 1400px;
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+            /* Custom cursor implementation */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-white);
+            color: var(--color-black);
+            font-family: var(--font-sans);
+            font-weight: 300;
+            font-size: clamp(15px, 1.2vw, 17px);
+            line-height: 1.8;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background-color: var(--color-black);
+            color: var(--color-white);
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-white);
+            mix-blend-mode: difference;
+        }
+
+        /* Typography Globals */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-serif);
+            font-weight: 300;
+            line-height: 1.1;
+        }
+
+        .text-accent {
+            color: var(--color-charcoal);
+        }
+
+        .uppercase-label {
+            font-family: var(--font-sans);
+            font-size: clamp(11px, 1vw, 13px);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .italic-serif {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: clamp(24px, 3vw, 32px);
+            line-height: 1.4;
+        }
+
+        /* Layout Utility */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        .section-padding {
+            padding-top: var(--spacing-section);
+            padding-bottom: var(--spacing-section);
+        }
+
+        /* Intersection Observer Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* Buttons & Links */
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 40px;
+            border: 1px solid var(--color-black);
+            background: transparent;
+            color: var(--color-black);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            transition: color 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-black);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: var(--color-white);
+        }
+
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-inverted {
+            border-color: var(--color-white);
+            color: var(--color-white);
+        }
+
+        .btn-inverted::before {
+            background: var(--color-white);
+        }
+
+        .btn-inverted:hover {
+            color: var(--color-black);
+        }
+
+        /* Navigation */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 100;
+            transition: background-color 0.4s ease, backdrop-filter 0.4s ease, color 0.4s ease;
+            color: var(--color-white);
+            /* Defaults to white over hero section */
+        }
+
+        .nav-scrolled {
+            background-color: rgba(255, 255, 255, 0.85);
+            color: var(--color-black);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-scrolled.dark-section-nav {
+            background-color: rgba(10, 10, 10, 0.85);
+            color: var(--color-white);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 5vw;
+            max-width: var(--container-width);
+            margin: 0 auto;
+        }
+
+        .brand-name {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            padding-bottom: 4px;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-white);
+            min-width: 160px;
+            border: 1px solid var(--color-gray);
+            z-index: 101;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        .nav-scrolled .dropdown-menu {
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .dark-section-nav .dropdown-menu {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-item {
+            color: var(--color-black);
+            padding: 12px 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .dark-section-nav .dropdown-item {
+            color: var(--color-white);
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--color-ivory);
+        }
+
+        .dark-section-nav .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            width: 30px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            height: 1px;
+            width: 100%;
+            background-color: currentColor;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        body.menu-open .menu-toggle span:first-child {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        body.menu-open .menu-toggle span:last-child {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        body.menu-open .nav-wrapper {
+            color: var(--color-black) !important;
+            background-color: transparent !important;
+            backdrop-filter: none !important;
+            border-bottom: none !important;
+        }
+
+        body.menu-open .dropdown-item {
+            color: var(--color-black) !important;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: var(--color-white);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.4s ease, visibility 0.4s ease;
+                z-index: 1000;
+            }
+
+            body.menu-open .nav-links {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .dropdown-menu {
+                position: static;
+                transform: none;
+                box-shadow: none;
+                border: none;
+                opacity: 1;
+                visibility: visible;
+                display: none;
+                background-color: transparent;
+                margin-top: 20px;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: flex;
+            }
+
+            .nav-scrolled .dropdown-menu,
+            .dark-section-nav .dropdown-menu {
+                background-color: transparent !important;
+                border: none !important;
+            }
+
+            .dark-section-nav .dropdown-item {
+                color: var(--color-black);
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .cursor {
+                display: none !important;
+            }
+
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            text-align: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Paris Fashion Week Inspired & Black and White */
+            background-image: url('assets/images/fashion-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) contrast(1.1);
+            z-index: -2;
+            animation: kenBurns 20s linear infinite alternate;
+        }
+
+        @keyframes kenBurns {
+            0% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.35);
+            /* Subtle dark overlay */
+            z-index: -1;
+        }
+
+        .hero-content {
+            padding: 0 5vw;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-tagline {
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: clamp(72px, 8vw, 120px);
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        .hero-desc {
+            font-size: clamp(16px, 1.5vw, 20px);
+            margin-bottom: 60px;
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        /* Philosophy Section */
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 45% 55%;
+            gap: 8vw;
+            align-items: start;
+        }
+
+        .intro-quote {
+            position: sticky;
+            top: 150px;
+        }
+
+        .intro-text p {
+            margin-bottom: 40px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background-color: var(--color-black);
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            .intro-quote {
+                position: static;
+            }
+        }
+
+        /* Services Section */
+        .services {
+            background-color: var(--color-ivory);
+        }
+
+        .section-title-wrapper {
+            text-align: center;
+            margin-bottom: 100px;
+        }
+
+        .section-title {
+            font-size: clamp(36px, 4vw, 48px);
+        }
+
+        .services-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+        }
+
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .service-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .services-row {
+                grid-template-columns: 1fr;
+                gap: 80px;
+            }
+        }
+
+        /* Featured Editorial Moment */
+        .editorial-moment {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .editorial-img-wrapper {
+            width: 80%;
+            height: clamp(50vh, 70vh, 800px);
+            overflow: hidden;
+            margin-bottom: 80px;
+        }
+
+        .editorial-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .editorial-img-wrapper:hover .editorial-img {
+            transform: scale(1.05);
+        }
+
+        .editorial-quote {
+            max-width: 900px;
+        }
+
+        @media (max-width: 768px) {
+            .editorial-img-wrapper {
+                width: 100%;
+                height: 50vh;
+            }
+        }
+
+        /* Approach Section */
+        .approach-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .approach-step {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 40px;
+            align-items: start;
+            border-top: 1px solid var(--color-gray);
+            padding: 60px 0;
+        }
+
+        .approach-step:last-child {
+            border-bottom: 1px solid var(--color-gray);
+        }
+
+        .step-number {
+            font-family: var(--font-sans);
+            font-size: 40px;
+            color: var(--color-gray);
+            font-weight: 300;
+            line-height: 1;
+        }
+
+        .step-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--color-black);
+        }
+
+        @media (max-width: 768px) {
+            .approach-step {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* Journal Section */
+        .journal {
+            background-color: var(--color-ivory);
+        }
+
+        .journal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .journal-card {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            cursor: pointer;
+        }
+
+        .journal-img-wrapper {
+            width: 100%;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .journal-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) sepia(10%);
+            transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 1s ease;
+        }
+
+        .journal-card:hover .journal-img {
+            transform: scale(1.03);
+            filter: grayscale(0%) sepia(0%);
+        }
+
+        .journal-title {
+            font-size: 28px;
+            line-height: 1.2;
+        }
+
+        @media (max-width: 768px) {
+            .journal-grid {
+                grid-template-columns: 1fr;
+                gap: 80px;
+            }
+        }
+
+        /* Contact Section */
+        .contact {
+            background-color: var(--color-dark-gray);
+            color: var(--color-white);
+            text-align: center;
+        }
+
+        .contact-heading {
+            font-size: clamp(40px, 6vw, 80px);
+            margin-bottom: 80px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            margin-bottom: 80px;
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .contact-info {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 40px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--color-gray);
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background-color: var(--color-white);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+        }
+
+        /* Marquee Carousel */
+        .marquee-wrapper {
+            width: 100vw;
+            overflow: hidden;
+            background-color: var(--color-white);
+            padding: 40px 0 0 0;
+            /* Only top padding so it sits flush on footer */
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 60s linear infinite;
+        }
+
+
+
+        .marquee-item {
+            width: 300px;
+            height: 400px;
+            margin-right: 0;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .marquee-item {
+                width: 200px;
+                height: 280px;
+            }
+        }
+
+        .marquee-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Force all images and background to strictly B&W */
+        img,
+        .page-hero-bg,
+        .hero-bg {
+            filter: grayscale(100%) contrast(1.1) !important;
+        }
+
+        /* She Glows Specific Styles */
+        .hero-bg-glows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('assets/images/she-glows-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(100%) contrast(1.1);
+            z-index: -2;
+            animation: kenBurns 20s linear infinite alternate;
+        }
+
+        .focus-text {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: clamp(20px, 2.5vw, 32px);
+            line-height: 1.5;
+            font-family: var(--font-serif);
+        }
+
+        .glow-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+            align-items: center;
+            margin-top: 100px;
+        }
+
+        .glow-text p {
+            margin-bottom: 24px;
+        }
+
+        .glow-image-wrapper {
+            position: relative;
+            overflow: hidden;
+            /* Removed aspect-ratio to let content dictate height naturally */
+        }
+
+        .glow-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(100%);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glow-image-wrapper:hover .glow-image {
+            transform: scale(1.05);
+        }
+
+        .founder-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+            align-items: center;
+        }
+
+        .founder-img-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .founder-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(100%);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .founder-img-wrapper:hover .founder-img {
+            transform: scale(1.05);
+        }
+
+        .founder-name {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 4vw, 48px);
+            margin: 10px 0 20px;
+        }
+
+        @media (max-width: 768px) {
+
+            .glow-grid,
+            .founder-grid,
+            .connect-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        /* Connect with She Glows Section */
+        .connect-section {
+            background-color: var(--color-black);
+            color: var(--color-white);
+            margin: 0;
+            padding: 100px 5vw;
+        }
+
+        .connect-grid {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6vw;
+            align-items: center;
+        }
+
+        .connect-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .connect-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: grayscale(100%);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .connect-img-wrapper:hover .connect-img {
+            transform: scale(1.05);
+        }
+
+        .connect-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .connect-heading {
+            font-family: var(--font-serif);
+            font-size: clamp(32px, 4vw, 48px);
+            margin-bottom: 20px;
+        }
+
+        .connect-form-group {
+            margin-bottom: 24px;
+        }
+
+        .connect-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--color-white);
+            padding: 12px 0;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            letter-spacing: 1px;
+            transition: border-color 0.4s ease;
+        }
+
+        .connect-input:focus {
+            outline: none;
+            border-bottom-color: var(--color-white);
+        }
+
+        .connect-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .connect-socials {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .connect-social-link {
+            font-family: var(--font-sans);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, 0.6);
+            transition: color 0.4s ease;
+        }
+
+        .connect-social-link:hover {
+            color: var(--color-white);
+        }
+
+
+
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--color-black);
+            z-index: 9998;
+            /* Just below the preloader */
+            opacity: 1;
+            pointer-events: none;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page-transition-overlay.fade-in {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="custom-cursor"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-wrapper" id="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="brand-name interactive-el">Amor Maison</a>
+            <div class="menu-toggle interactive-el" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+            </div>
+            <div class="nav-links">
+                <a href="about.html" class="nav-link interactive-el">About</a>
+                <div class="dropdown interactive-el">
+                    <span class="nav-link" style="cursor:none;">Maison</span>
+                    <div class="dropdown-menu">
+                        <a href="fashion.html" class="dropdown-item interactive-el">Fashion</a>
+                        <a href="beauty.html" class="dropdown-item interactive-el">Beauty</a>
+                        <a href="wellness.html" class="dropdown-item interactive-el">Wellness</a>
+                    </div>
+                </div>
+                <a href="she-glows.html" class="nav-link interactive-el"
+                    style="border-bottom: 1px solid currentColor;">She Glows</a>
+                <a href="inside-maison.html" class="nav-link interactive-el">Inside The Maison</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg-glows"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <span class="uppercase-label hero-tagline fade-up">Maison Initiative</span>
+                <h1 class="hero-title fade-up delay-1">She Glows</h1>
+                <p class="hero-desc fade-up delay-2">An exclusive sanctuary of strategic elevation and uncompromising
+                    operational support for female founders in Dubai.</p>
+                <div class="fade-up delay-3">
+                    <a href="#manifesto" class="btn btn-inverted interactive-el">Explore The Initiative</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manifesto / Focus Text -->
+        <section id="manifesto" class="section-padding container">
+            <div class="fade-up">
+                <div class="focus-text">
+                    "The ambition to build is universal, but navigating the architectural intricacies of establishing a
+                    business in Dubai can be profoundly taxing. We believe that entrepreneurial logistics should never
+                    compromise creative energy."
+                </div>
+            </div>
+
+            <div class="glow-grid fade-up delay-1">
+                <div class="glow-image-wrapper" style="position: relative;">
+                    <!-- Business woman abstract video -->
+                    <video id="glow-video" src="assets/images/4.mp4" autoplay loop muted playsinline
+                        style="width: 100%; height: auto; display: block; filter: grayscale(100%); transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;"></video>
+                    <button id="glow-mute-btn" class="interactive-el"
+                        style="position: absolute; bottom: 20px; right: 20px; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; padding: 12px 24px; font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; cursor: pointer; z-index: 10; transition: all 0.4s ease;">Unmute</button>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const video = document.getElementById('glow-video');
+                            const btn = document.getElementById('glow-mute-btn');
+                            if (video && btn) {
+                                btn.addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    video.muted = !video.muted;
+                                    btn.textContent = video.muted ? 'Unmute' : 'Mute';
+
+                                    if (!video.muted) {
+                                        btn.style.background = '#fff';
+                                        btn.style.color = '#000';
+                                        btn.style.borderColor = '#fff';
+                                    } else {
+                                        btn.style.background = 'rgba(0, 0, 0, 0.7)';
+                                        btn.style.color = '#fff';
+                                        btn.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                                    }
+                                });
+                                // Handle hover effect matching toggle state
+                                btn.addEventListener('mouseenter', () => {
+                                    if (video.muted) { btn.style.background = 'rgba(0, 0, 0, 0.9)'; }
+                                });
+                                btn.addEventListener('mouseleave', () => {
+                                    if (video.muted) { btn.style.background = 'rgba(0, 0, 0, 0.7)'; }
+                                });
+                            }
+                        });
+                    </script>
+                </div>
+                <div class="glow-text">
+                    <h2 class="italic-serif" style="margin-bottom: 24px;">Frictionless Ascension.</h2>
+                    <p>
+                        "She Glows" was conceived as an exclusive sanctuary of strategic elevation for female founders.
+                        The reality of licensing, jurisdiction, and legal frameworks in the UAE often acts as a massive
+                        barrier to profound feminine talent.
+                    </p>
+                    <p>
+                        Our mission is radically simple: we absorb the operational chaos, providing women with a
+                        seamless, uncompromisingly luxurious framework to establish their enterprise. From entity
+                        incorporation and premium banking liaisons to bespoke real estate advisory for your commercial
+                        spaces, we construct the foundation so you can remain inherently focused on the vision.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider fade-up"></div>
+
+        <!-- Services Section Specific to She Glows -->
+        <section class="services section-padding container">
+            <div class="section-title-wrapper fade-up">
+                <h2 class="section-title">Initiative Architecture</h2>
+            </div>
+            <div class="services-row">
+                <div class="service-item fade-up">
+                    <span class="uppercase-label">01</span>
+                    <h3 class="service-title">Entity Incorporation</h3>
+                    <p>Guiding you through the labyrinth of strict jurisdictions and licensing to orchestrate a pristine
+                        corporate architecture for your new maison.</p>
+                </div>
+                <div class="service-item fade-up delay-1">
+                    <span class="uppercase-label">02</span>
+                    <h3 class="service-title">Premium Banking</h3>
+                    <p>Facilitating immaculate introductions and seamless liaison with tier-one financial institutions,
+                        securing the fiscal backbone of your venture.</p>
+                </div>
+                <div class="service-item fade-up delay-2">
+                    <span class="uppercase-label">03</span>
+                    <h3 class="service-title">Bespoke Real Estate</h3>
+                    <p>Exclusive advisory and acquisition of elite commercial spaces, transforming raw square footage
+                        into legendary environments of brand expression.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider fade-up" style="margin-top: 100px;"></div>
+
+        <!-- The Founder Section -->
+        <section class="section-padding container">
+            <div class="founder-grid">
+                <div class="founder-img-wrapper fade-up">
+                    <img src="assets/images/3.png" alt="Princess - Founder of She Glows" class="founder-img">
+                </div>
+                <div class="founder-bio">
+                    <span class="uppercase-label fade-up">The Architect behind She Glows</span>
+                    <h2 class="founder-name fade-up delay-1">Princess</h2>
+                    <h3 class="italic-serif fade-up delay-2" style="margin-bottom: 30px;">"Empowerment is not given; it
+                        is structurally built."</h3>
+                    <p class="fade-up delay-3">
+                        After navigating the complexities of establishing multiple ventures in the Middle East, Princess
+                        realized that the sheer operational burden placed on female entrepreneurs in Dubai was
+                        distracting them from their true creative visions.
+                    </p>
+                    <p class="fade-up delay-4">
+                        She founded "She Glows" to function as the ultimate shield and catalyst. By removing the
+                        friction of bureaucratic labyrinths, securing tier-one banking, and acquiring exquisite
+                        commercial real estate, she ensures that the women she partners with can channel their absolute
+                        focus into building iconic brands and legacies. Her meticulous approach guarantees a flawless,
+                        premium framework for every new maison born under the initiative.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connect with She Glows Section -->
+        <section id="connect" class="connect-section">
+            <div class="connect-grid">
+                <div class="fade-up">
+                    <h2 class="connect-heading">Connect with She Glows</h2>
+                    <p style="margin-bottom: 40px; color: rgba(255,255,255,0.7); font-size: 14px; max-width: 400px;">
+                        Join the ultimate tier of female operational empowerment in the Middle East. Initiate your
+                        dialogue below.
+                    </p>
+                    <form onsubmit="event.preventDefault();">
+                        <div class="connect-form-group">
+                            <input type="text" class="connect-input interactive-el" placeholder="FULL NAME" required>
+                        </div>
+                        <div class="connect-form-group">
+                            <input type="email" class="connect-input interactive-el" placeholder="EMAIL ADDRESS"
+                                required>
+                        </div>
+                        <div class="connect-form-group">
+                            <input type="text" class="connect-input interactive-el" placeholder="MAISON / PROJECT NAME">
+                        </div>
+                        <button type="submit" class="btn btn-inverted interactive-el"
+                            style="margin-top: 20px; width: 100%;">Submit Inquiry</button>
+                    </form>
+
+                    <div class="connect-socials">
+                        <a href="#" class="connect-social-link interactive-el">Instagram</a>
+                        <a href="#" class="connect-social-link interactive-el">LinkedIn</a>
+                        <a href="#" class="connect-social-link interactive-el">Journal</a>
+                    </div>
+                </div>
+
+                <div class="connect-img-wrapper fade-up delay-1">
+                    <img src="assets/images/5.jpg" alt="Connect with She Glows" class="connect-img">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Marquee Carousel -->
+    <section class="marquee-wrapper">
+        <div class="marquee-track">
+            <!-- First Set -->
+            <div class="marquee-item"><img src="assets/images/mq1.jpg" alt="Fashion 1"></div>
+            <div class="marquee-item"><img src="assets/images/mq2.jpg" alt="Fashion 2"></div>
+            <div class="marquee-item"><img src="assets/images/mq3.jpg" alt="Fashion 3"></div>
+            <div class="marquee-item"><img src="assets/images/mq4.jpg" alt="Fashion 4"></div>
+            <div class="marquee-item"><img src="assets/images/mq5.jpg" alt="Fashion 5"></div>
+            <div class="marquee-item"><img src="assets/images/mq6.jpg" alt="Fashion 8"></div>
+            <!-- Duplicated Set for Infinite Loop -->
+            <div class="marquee-item"><img src="assets/images/mq1.jpg" alt="Fashion 1"></div>
+            <div class="marquee-item"><img src="assets/images/mq2.jpg" alt="Fashion 2"></div>
+            <div class="marquee-item"><img src="assets/images/mq3.jpg" alt="Fashion 3"></div>
+            <div class="marquee-item"><img src="assets/images/mq4.jpg" alt="Fashion 4"></div>
+            <div class="marquee-item"><img src="assets/images/mq5.jpg" alt="Fashion 5"></div>
+            <div class="marquee-item"><img src="assets/images/mq6.jpg" alt="Fashion 8"></div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div>&copy; 2026 Amor Maison. All rights reserved.</div>
+        <div class="footer-links">
+            <a href="#" class="interactive-el">Instagram</a>
+            <a href="#" class="interactive-el">LinkedIn</a>
+            <a href="#" class="interactive-el">X</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+
+
+
+
+            // --- Page Transition Overlay Logic ---
+            const transitionOverlay = document.getElementById('page-transition-overlay');
+            if (transitionOverlay) {
+                // Initial fade in
+                requestAnimationFrame(() => {
+                    transitionOverlay.classList.add('fade-in');
+                });
+            }
+
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+
+                    // Allow normal navigation for external links, anchors, or new tabs, and exclude preloader interactions
+                    if (href && !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('mailto:') && target !== '_blank') {
+                        e.preventDefault();
+                        if (transitionOverlay) {
+                            transitionOverlay.classList.remove('fade-in');
+                        }
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 800); // Wait for overlay fade out
+                    }
+                });
+            });
+
+            // --- Custom Cursor Interaction ---
+            const cursor = document.getElementById('custom-cursor');
+            const interactables = document.querySelectorAll('.interactive-el, a, button, .dropdown, .journal-card');
+
+            // Update cursor position on move (using requesting animation frame for performance is optimal, 
+            // but standard mousemove event works for absolute simplicity here.)
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // Expand cursor on hovering interactive elements
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+            });
+
+            // --- Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    document.body.classList.toggle('menu-open');
+                });
+            }
+
+            // --- Mobile Dropdown Toggle ---
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 768) {
+                        dropdown.classList.toggle('active');
+                    }
+                });
+            });
+
+            // --- Close menu on link click ---
+            const navLinks = document.querySelectorAll('.nav-link:not(.dropdown > .nav-link), .dropdown-item');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    document.body.classList.remove('menu-open');
+                });
+            });
+
+            // --- Navigation Scroll Effect ---
+            const navbar = document.getElementById('navbar');
+            const darkSection = document.querySelector('.dark-section');
+
+            window.addEventListener('scroll', () => {
+                // Determine if we scrolled past the top
+                if (window.scrollY > 50) {
+                    navbar.classList.add('nav-scrolled');
+                } else {
+                    navbar.classList.remove('nav-scrolled');
+                }
+
+                // Invert navbar colors if over the dark section
+                if (darkSection) {
+                    const rect = darkSection.getBoundingClientRect();
+                    // If the top of the dark section passes the nav, and its bottom hasn't passed it
+                    if (rect.top <= 70 && rect.bottom >= 0) {
+                        navbar.classList.add('dark-section-nav');
+                    } else {
+                        navbar.classList.remove('dark-section-nav');
+                    }
+                }
+            });
+
+            // --- Scroll Reveal Animations Using Intersection Observer ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target); // Unobserve to play animation only once
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-up');
+            fadeElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+
+</html>
